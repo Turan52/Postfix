@@ -1,0 +1,18 @@
+Version: Ubuntu22.04 LTS
+Normal user.
+
+1)sudo apt-get update && sudo apt-get upgrade && sudo apt-get dist-upgrade
+2)sudo DEBIAN_PRIORITY=low apt install postfix  ("DEBIAN_PRIORITY=low": This sets the priority of the installation to "low". This means that any dependencies that need to be installed along with Postfix will be given a lower priority than packages that are already installed on your system. This can help prevent conflicts with existing software)
+
+Note:Numerous number of Postfix’s configuration settings are defined in the /etc/postfix/main.cf file. Rather than editing this file directly, you can use Postfix’s postconf command to query or set configuration settings.
+ 
+3)sudo postconf -e 'home_mailbox= Maildir/'  (To configure the home_mailbox variable, set it to Maildir/ which will create a directory structure under that name within the user's home directory.)
+4)sudo postconf -e 'virtual_alias_maps= hash:/etc/postfix/virtual'  (set the location of the virtual_alias_maps table, which maps arbitrary email accounts to Linux system accounts. Run the following command, which maps the table location to a hash database file named /etc/postfix/virtual)
+5)sudo nano /etc/postfix/virtual (Now that the location of the virtual maps file has been specified in the main.cf file, you can proceed to create the file itself and start mapping email accounts to user accounts on the Linux system. Simply use your preferred text editor to create the file - for example, in this case, we will use the nano text editor)
+Note: Check installation(4) for this step.
+6)sudo postmap /etc/postfix/virtual (The command "sudo postmap /etc/postfix/virtual" applies the mapping defined in the /etc/postfix/virtual file to Postfix's virtual mailbox table.
+
+When you create a virtual mailbox domain or user, you need to map the e-mail address to an existing system user or alias. The mapping file (/etc/postfix/virtual in this case) contains the necessary mappings between virtual and system users)
+7)sudo systemctl restart postfix (restarting the postfix process,for applying current changes)
+8)sudo ufw allow Postfix (You might run into problems with UFW.For espacing these issue,you'll have to add a firewall to allow an exception for Postfix)
+Note:On other steps we install mail client and initialize the Maildir Structure.
