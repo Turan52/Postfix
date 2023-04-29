@@ -1,0 +1,49 @@
+Ubuntu 22.04 LTS
+
+Note:Basic information on "s-nail" command and Maildir Structure.
+So, "s-nail" command is a feature-rich email client that can be used to interact with mailboxes in Unix-like systems. It is a variant of the BSD mailx command, also known as "nail", and is designed to handle the Maildir format correctly. The s-nail command can be used to view, compose, send, and manage emails.
+
+In addition to supporting standard email functions like sending and receiving messages, s-nail also supports advanced features like MIME attachments, PGP encryption, and more. It can be used both interactively in a terminal session and in scripts to automate email tasks.
+
+To enable interaction with the incoming mail, you can install the s-nail package, which is a highly functional version of the BSD xmail client that can accurately handle the Maildir format. However, before proceeding with the installation, it's important to verify that your MAIL environment variable is properly configured.
+
+The MAIL variable indicates where your user's mail can be found and is required by s-nail to locate your mailbox. To ensure that the MAIL variable is set correctly for all types of access to your account (e.g., ssh, su, su -, or sudo), you can set the variable in the /etc/bash.bashrc file. Additionally, to ensure that the variable is set for all users by default, you can add it to a file within the /etc/profile.d directory.
+
+By setting the MAIL variable in the /etc/bash.bashrc file, you are ensuring that it is set each time a new shell is opened, regardless of how the shell was accessed. Adding it to a file within the /etc/profile.d directory, on the other hand, makes sure that it is set for all users on the system, regardless of how they log in or access their accounts.
+
+After the MAIL variable has been correctly set, you can proceed with the installation of the s-nail package, which will allow you to interact with incoming mail using the Maildir format.
+
+1)echo 'export MAIL=~/Maildir' | sudo tee -a /etc/bash.bashrc | sudo tee -a /etc/profile.d/mail.sh (Adding variables)
+2)source /etc/profile.d/mail.sh  (To ensure that the MAIL environment variable is set correctly in your current session, you can source the /etc/profile.d/mail.sh file. This will import the contents of the file into your current shell session, including the MAIL variable definition)
+3)sudo apt install s-nail (installing s-nail with apt)
+4)sudo nano /etc/s-nail.rc (Go to the bottom of the file and add these following lines:
+set emptystart
+set folder=Maildir
+set record=+sent
+
+Note:Meanings:
+set emptystart - This feature enables the email client to open successfully even if the mailbox is empty. 
+set folder=Maildir - sets the Maildir directory to the internal folder variable
+set recor=+sent - This functionality generates an mbox file for storing sent emails within the directory that is specified by the "folder" variable. In this specific case, the "folder" variable is set to Maildir, which means that the sent mbox file will be stored within the Maildir directory.
+
+5)echo 'init' | s-nail -s 'init' -Snorecord user (sending an e-mail using s-nail)
+
+Note:Output
+Can't canonicalize "/home/sammy/Maildir"
+No worries, there's no problem it may only show up when sending this first message.
+
+6)s-nail (send s-nail command)
+You will see your message on the console.
+You can simply press "ENTER" for displaying the message.
+Can get back to the message list by simply sending "h"
+You can delete it using command "d"
+Can get back to terminal using command "q"
+
+
+As a final step to verify the email client's functionality, you can test whether s-nail is able to successfully send email messages. To perform this test, you can use a text file and redirect its contents into the s-nail process, similar to the method used to send the initial message in the previous step.
+
+7)nano ~/test_message (you can check test_message.jpg)
+8)cat ~/test_message | s-nail -s 'Test e-mail example' -r contact@example.com user@email.com (change to appropriate e-mail,which you will get your message)
+9)s-nail (You can run this command,and view your sent messages on the console)
+Note:from the e-mail client,view your messages :
+file +sent (it is in s-nail )
